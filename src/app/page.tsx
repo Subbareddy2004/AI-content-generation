@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from 'react';
 import { ContentGenerationForm } from '@/components/ContentGenerationForm';
 import { generateContent, optimizeContent, analyzeSentiment, ContentGenerationParams } from '@/lib/gemini';
-import { SocialShare } from '@/components/socialshare';
+import { SocialShare } from '@/components/SocialShare';
 
 export default function Home() {
   const [generatedContent, setGeneratedContent] = useState<string>('');
