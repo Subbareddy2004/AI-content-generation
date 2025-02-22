@@ -57,19 +57,36 @@ export async function analyzeSentiment(content: string): Promise<{
 
   const prompt = `
     Analyze the sentiment of the following content and provide a score between -1 (negative) 
-    and 1 (positive), with 0 being neutral:
+    and 1 (positive), with 0 being neutral.
 
+    Content to analyze:
     ${content}
 
-    Return only a JSON object with 'sentiment' and 'score' properties.
+    Respond with a valid JSON object in this exact format:
+    {"score": <number between -1 and 1>}
   `;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const analysis = JSON.parse(response.text());
-
-  return {
-    sentiment: analysis.score > 0.2 ? 'positive' : analysis.score < -0.2 ? 'negative' : 'neutral',
-    score: analysis.score
-  };
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const text = response.text();
+    
+    try {
+      const analysis = JSON.parse(text);
+      if (typeof analysis.score !== 'number' || analysis.score < -1 || analysis.score > 1) {
+        throw new Error('Invalid score value');
+      }
+      
+      return {
+        sentiment: analysis.score > 0.2 ? 'positive' : analysis.score < -0.2 ? 'negative' : 'neutral',
+        score: analysis.score
+      };
+    } catch (parseError) {
+      console.error('Failed to parse sentiment analysis response:', parseError);
+      throw new Error('Invalid sentiment analysis response format');
+    }
+  } catch (error) {
+    console.error('Error during sentiment analysis:', error);
+    throw error;
+  }
 }

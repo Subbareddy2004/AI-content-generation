@@ -1,0 +1,7 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#F3F4F6"/>
+  <path d="M400 180C413.255 180 424 169.255 424 156C424 142.745 413.255 132 400 132C386.745 132 376 142.745 376 156C376 169.255 386.745 180 400 180Z" fill="#D1D5DB"/>
+  <path d="M320 268V244C320 226.327 334.327 212 352 212H448C465.673 212 480 226.327 480 244V268" stroke="#D1D5DB" stroke-width="12"/>
+  <text x="400" y="100" font-family="Arial" font-size="24" fill="#6B7280" text-anchor="middle">News Image</text>
+  <text x="400" y="300" font-family="Arial" font-size="16" fill="#9CA3AF" text-anchor="middle">Placeholder</text>
+</svg>

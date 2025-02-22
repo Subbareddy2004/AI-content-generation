@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useState } from 'react';
 import { ContentGenerationForm } from '@/components/ContentGenerationForm';
 import { generateContent, optimizeContent, analyzeSentiment, ContentGenerationParams } from '@/lib/gemini';
-import { SocialShare } from '@/components/SocialShare';
+import { SocialShare } from '@/components/socialshare';
 
 export default function Home() {
   const [generatedContent, setGeneratedContent] = useState<string>('');
@@ -40,7 +40,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-6xl font-extrabold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-sm">
+        <h1 className="text-6xl mt-7 font-extrabold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600 drop-shadow-sm">
           AI Content Generator
         </h1>
         
@@ -63,13 +63,29 @@ export default function Home() {
                       {generatedContent}
                     </div>
                     <div className="flex justify-between items-center">
-                      <button
-                        onClick={handleOptimizeContent}
-                        disabled={isOptimizing}
-                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
-                      >
-                        {isOptimizing ? 'Optimizing...' : 'Optimize Content'}
-                      </button>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleOptimizeContent}
+                          disabled={isOptimizing}
+                          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                        >
+                          {isOptimizing ? 'Optimizing...' : 'Optimize Content'}
+                        </button>
+                        <button
+                          onClick={() => {
+                            navigator.clipboard.writeText(generatedContent);
+                            const button = document.activeElement as HTMLButtonElement;
+                            const originalText = button.textContent;
+                            button.textContent = 'Copied!';
+                            setTimeout(() => {
+                              button.textContent = originalText;
+                            }, 2000);
+                          }}
+                          className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                        >
+                          Copy Content
+                        </button>
+                      </div>
                       {sentiment && (
                         <div className="text-sm text-gray-600">
                           Sentiment: {sentiment.sentiment} ({sentiment.score})
