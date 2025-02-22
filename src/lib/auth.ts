@@ -28,7 +28,7 @@ export async function initiateTwitterAuth(): Promise<string> {
     return data.url;
   } catch (error) {
     console.error('X (Twitter) auth error:', error);
-    throw new Error(`Failed to initialize X (Twitter) authentication: ${error.message}`);
+    throw new Error(`Failed to initialize X (Twitter) authentication: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
@@ -89,7 +89,7 @@ export async function handleTwitterCallback(oauth_token: string, oauth_verifier:
     };
   } catch (error) {
     console.error('X (Twitter) callback error:', error);
-    throw new Error(`Failed to complete X (Twitter) authentication: ${error.message}`);
+    throw new Error(`Failed to complete X (Twitter) authentication: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
 
