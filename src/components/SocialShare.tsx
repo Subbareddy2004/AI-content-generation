@@ -14,33 +14,13 @@ export function SocialShare({ content, images }: SocialShareProps) {
   const [error, setError] = useState<string | null>(null);
 
   const handleShare = async (platform: 'twitter' | 'linkedin') => {
-    setIsPosting(true);
-    setError(null);
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(content)}`;
+    const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(content)}`;
 
-    try {
-      const post: SocialPost = {
-        content,
-        images,
-        platform
-      };
-
-      if (platform === 'twitter') {
-        await postToTwitter(post);
-      } else {
-        await postToLinkedIn(post);
-      }
-    } catch (err) {
-      if (err instanceof Error && err.message === 'Not authenticated') {
-        if (platform === 'twitter') {
-          initiateTwitterAuth();
-        } else {
-          initiateLinkedInAuth();
-        }
-      } else {
-        setError(err instanceof Error ? err.message : 'Failed to share content');
-      }
-    } finally {
-      setIsPosting(false);
+    if (platform === 'twitter') {
+      window.open(twitterShareUrl, '_blank');
+    } else {
+      window.open(linkedinShareUrl, '_blank');
     }
   };
 
@@ -49,24 +29,20 @@ export function SocialShare({ content, images }: SocialShareProps) {
       <div className="flex gap-4">
         <button
           onClick={() => handleShare('twitter')}
+          className="flex-1 bg-blue-400 text-white py-2 px-4 rounded hover:bg-blue-500 transition-colors"
           disabled={isPosting}
-          className="flex-1 px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 disabled:opacity-50 transition-colors"
         >
-          {isPosting ? 'Sharing...' : 'Share on Twitter'}
+          Share on Twitter
         </button>
         <button
           onClick={() => handleShare('linkedin')}
+          className="flex-1 bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
           disabled={isPosting}
-          className="flex-1 px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 disabled:opacity-50 transition-colors"
         >
-          {isPosting ? 'Sharing...' : 'Share on LinkedIn'}
+          Share on LinkedIn
         </button>
       </div>
-      {error && (
-        <div className="text-red-500 text-sm">
-          {error}
-        </div>
-      )}
+      {error && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 }

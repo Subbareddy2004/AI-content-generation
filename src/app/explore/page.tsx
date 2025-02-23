@@ -353,6 +353,24 @@ export default function ExplorePage() {
                     </button>
                     <button
                       onClick={() => {
+                        const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(generatedContent)}`;
+                        window.open(twitterShareUrl, '_blank');
+                      }}
+                      className="px-4 py-2 bg-blue-400 text-white rounded-lg hover:bg-blue-500 transition-colors"
+                    >
+                      Share on Twitter
+                    </button>
+                    <button
+                      onClick={() => {
+                        const linkedinShareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}&summary=${encodeURIComponent(generatedContent)}`;
+                        window.open(linkedinShareUrl, '_blank');
+                      }}
+                      className="px-4 py-2 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition-colors"
+                    >
+                      Share on LinkedIn
+                    </button>
+                    <button
+                      onClick={() => {
                         navigator.clipboard.writeText(generatedContent);
                         const button = document.activeElement as HTMLButtonElement;
                         const originalText = button.textContent;
