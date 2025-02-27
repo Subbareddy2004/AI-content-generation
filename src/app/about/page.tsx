@@ -34,8 +34,24 @@ export default function About() {
     } else if (key === 'brandGuidelines') {
       updatedPreferences.brandGuidelines = value;
     } else {
-      // Type assertion to handle the platform, tone, and length values
-      (updatedPreferences[key] as any) = value;
+      // Type guard to ensure value matches expected types
+      switch (key) {
+        case 'platform':
+          if (value === 'blog' || value === 'twitter' || value === 'linkedin' || value === 'facebook') {
+            updatedPreferences.platform = value;
+          }
+          break;
+        case 'tone':
+          if (value === 'professional' || value === 'casual' || value === 'friendly' || value === 'formal') {
+            updatedPreferences.tone = value;
+          }
+          break;
+        case 'length':
+          if (value === 'short' || value === 'medium' || value === 'long') {
+            updatedPreferences.length = value;
+          }
+          break;
+      }
     }
     setPreferences(updatedPreferences);
     localStorage.setItem('contentPreferences', JSON.stringify(updatedPreferences));

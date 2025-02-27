@@ -81,7 +81,6 @@ export default function ExplorePage() {
   }, []);
 
   const handleCreatePost = async (article: NewsArticle) => {
-    setSelectedArticle(article);
     setIsGenerating(true);
     setShowModal(true);
 
@@ -96,9 +95,13 @@ export default function ExplorePage() {
       });
       
       setGeneratedContent(content);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error('Error generating content:', error);
-      setError('Failed to generate content');
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('Failed to generate content');
+      }
     } finally {
       setIsGenerating(false);
     }

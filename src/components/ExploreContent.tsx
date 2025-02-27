@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 
 type NewsItem = {
@@ -43,11 +43,7 @@ export default function ExploreContent() {
     domain: 'all',
   });
 
-  useEffect(() => {
-    fetchNews();
-  }, [filters]);
-
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -58,29 +54,20 @@ export default function ExploreContent() {
       let filteredNews = data.articles;
       if (filters.domain !== 'all') {
         filteredNews = filteredNews.filter((item: NewsItem) => {
-          const content = (item.title + item.description).toLowerCase();
-          switch (filters.domain) {
-            case 'tech':
-              return content.includes('technology') || content.includes('software') || content.includes('digital');
-            case 'fintech':
-              return content.includes('fintech') || content.includes('finance') || content.includes('banking');
-            case 'ai':
-              return content.includes('ai') || content.includes('artificial intelligence') || content.includes('machine learning');
-            case 'agri':
-              return content.includes('agriculture') || content.includes('farming') || content.includes('crop');
-            default:
-              return true;
-          }
+          return item.source.name.toLowerCase().includes(filters.domain.toLowerCase());
         });
       }
-      
       setNews(filteredNews);
     } catch (error) {
       console.error('Error fetching news:', error);
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchNews();
+  }, [fetchNews]);
 
   return (
     <div className="container mx-auto px-4 py-8">

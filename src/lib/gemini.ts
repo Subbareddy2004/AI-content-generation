@@ -19,21 +19,6 @@ export async function generateContent(params: ContentGenerationParams): Promise<
   const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
   try {
-    const prompt = {
-      contents: [{
-        parts: [{
-          text: `Generate content for ${params.platform} with the following specifications:
-          Topic: ${params.topic}
-          Tone: ${params.tone}
-          Length: ${params.length}
-          ${params.keywords ? `Keywords to include: ${params.keywords.join(', ')}` : ''}
-          ${params.brandGuidelines ? `Brand Guidelines: ${params.brandGuidelines}` : ''}
-
-          Please ensure the content is engaging, well-structured, and optimized for the specified platform.`
-        }]
-      }]
-    };
-
     const result = await model.generateContent({
       contents: [{
         role: 'user',
