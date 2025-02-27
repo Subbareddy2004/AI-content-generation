@@ -16,57 +16,85 @@ export interface ContentGenerationParams {
 }
 
 export async function generateContent(params: ContentGenerationParams): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
-  const prompt = `
-    Generate content for ${params.platform} with the following specifications:
-    Topic: ${params.topic}
-    Tone: ${params.tone}
-    Length: ${params.length}
-    ${params.keywords ? `Keywords to include: ${params.keywords.join(', ')}` : ''}
-    ${params.brandGuidelines ? `Brand Guidelines: ${params.brandGuidelines}` : ''}
+  try {
+    const prompt = {
+      contents: [{
+        parts: [{
+          text: `Generate content for ${params.platform} with the following specifications:
+          Topic: ${params.topic}
+          Tone: ${params.tone}
+          Length: ${params.length}
+          ${params.keywords ? `Keywords to include: ${params.keywords.join(', ')}` : ''}
+          ${params.brandGuidelines ? `Brand Guidelines: ${params.brandGuidelines}` : ''}
 
-    Please ensure the content is engaging, well-structured, and optimized for the specified platform.
-  `;
+          Please ensure the content is engaging, well-structured, and optimized for the specified platform.`
+        }]
+      }]
+    };
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  return response.text();
+    const result = await model.generateContent({
+      contents: [{
+        role: 'user',
+        parts: [{
+          text: `Generate content for ${params.platform} with the following specifications:
+          Topic: ${params.topic}
+          Tone: ${params.tone}
+          Length: ${params.length}
+          ${params.keywords ? `Keywords to include: ${params.keywords.join(', ')}` : ''}
+          ${params.brandGuidelines ? `Brand Guidelines: ${params.brandGuidelines}` : ''}
+
+          Please ensure the content is engaging, well-structured, and optimized for the specified platform.`
+        }]
+      }]
+    });
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error('Error generating content:', error);
+    throw error;
+  }
 }
 
 export async function optimizeContent(content: string, platform: string): Promise<string> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
-  const prompt = `
-    Optimize the following content for ${platform}, ensuring it follows platform best practices 
-    and maximizes engagement potential while maintaining the original message:
+  try {
+    const prompt = `
+      Optimize the following content for ${platform}, ensuring it follows platform best practices 
+      and maximizes engagement potential while maintaining the original message:
 
-    ${content}
-  `;
+      ${content}
+    `;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  return response.text();
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    return response.text();
+  } catch (error) {
+    console.error('Error optimizing content:', error);
+    throw error;
+  }
 }
 
 export async function analyzeSentiment(content: string): Promise<{
   sentiment: 'positive' | 'neutral' | 'negative';
   score: number;
 }> {
-  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-
-  const prompt = `
-    Analyze the sentiment of the following content and provide a score between -1 (negative) 
-    and 1 (positive), with 0 being neutral.
-
-    Content to analyze:
-    ${content}
-
-    Respond with a valid JSON object in this exact format:
-    {"score": <number between -1 and 1>}
-  `;
+  const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
   try {
+    const prompt = `
+      Analyze the sentiment of the following content and provide a score between -1 (negative) 
+      and 1 (positive), with 0 being neutral.
+
+      Content to analyze:
+      ${content}
+
+      Respond with a valid JSON object in this exact format:
+      {"score": <number between -1 and 1>}
+    `;
+
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();

@@ -45,6 +45,7 @@ export function ContentGenerationForm({ onSubmit }: ContentGenerationFormProps) 
           value={formData.topic}
           onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
           placeholder="Enter your topic"
+          suppressHydrationWarning
         />
       </div>
 
@@ -57,6 +58,7 @@ export function ContentGenerationForm({ onSubmit }: ContentGenerationFormProps) 
           className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all text-gray-800 text-lg bg-gray-50 hover:bg-white appearance-none cursor-pointer"
           value={formData.platform}
           onChange={(e) => setFormData({ ...formData, platform: e.target.value as ContentGenerationParams['platform'] })}
+          suppressHydrationWarning
         >
           <option value="blog">Blog</option>
           <option value="twitter">Twitter</option>
@@ -73,6 +75,7 @@ export function ContentGenerationForm({ onSubmit }: ContentGenerationFormProps) 
           className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all text-gray-800 text-lg bg-gray-50 hover:bg-white appearance-none cursor-pointer"
           value={formData.tone}
           onChange={(e) => setFormData({ ...formData, tone: e.target.value as ContentGenerationParams['tone'] })}
+          suppressHydrationWarning
         >
           <option value="professional">Professional</option>
           <option value="casual">Casual</option>
@@ -90,6 +93,7 @@ export function ContentGenerationForm({ onSubmit }: ContentGenerationFormProps) 
           className="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all text-gray-800 text-lg bg-gray-50 hover:bg-white appearance-none cursor-pointer"
           value={formData.length}
           onChange={(e) => setFormData({ ...formData, length: e.target.value as ContentGenerationParams['length'] })}
+          suppressHydrationWarning
         >
           <option value="short">Short</option>
           <option value="medium">Medium</option>
@@ -108,6 +112,7 @@ export function ContentGenerationForm({ onSubmit }: ContentGenerationFormProps) 
           value={formData.keywords?.join(', ') || ''}
           onChange={(e) => setFormData({ ...formData, keywords: e.target.value.split(',').map(k => k.trim()).filter(Boolean) })}
           placeholder="Enter keywords separated by commas"
+          suppressHydrationWarning
         />
       </div>
 
@@ -128,6 +133,7 @@ export function ContentGenerationForm({ onSubmit }: ContentGenerationFormProps) 
         type="submit"
         disabled={isLoading}
         className="w-full py-4 px-6 bg-gradient-to-r from-blue-600 to-blue-800 text-white text-lg font-semibold rounded-xl hover:from-blue-700 hover:to-blue-900 focus:ring-4 focus:ring-blue-300 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg transform hover:scale-[1.02] active:scale-[0.98]"
+        suppressHydrationWarning
       >
         {isLoading ? (
           <span className="flex items-center justify-center space-x-3">
